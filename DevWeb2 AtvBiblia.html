@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevWeb2 AtvBíblia</title>
+</head>
+<body>
+    <div >
+        <canvas id="grafico"></canvas>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+    <script>
+        let URL = 'http://127.0.0.1:3000'
+        let num;
+        let name;
+        async function getNum() 
+        {
+            await fetch(`${URL}/getnumarray`)
+                .then(res => res.json()
+                .then(result => num = result))
+        }
+        async function getName()
+        {
+            await fetch(`${URL}/getnamearray`)
+                .then(res => res.json()
+                .then(result => name = result))
+        }
+        chart();
+        async function chart() {
+        await getNum();
+        await getName();
+        
+        var ctx = document.getElementById('grafico').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'polarArea',
+            data: {
+                labels: name,
+                datasets: [{
+                    label: '',
+                    data: num, 
+                    backgroundColor:  ['#0022D1','#1D9FF5','#0CD49B','#F5BC13','#FF0A1E','#8442f5','#f54293', '#42cef5', '#f57842', '#a7f542'],                                       
+                }]
+            },
+            options: {
+                legend: {
+                    display: false
+                },
+                scales: {
+                    yAxes: [{
+                        gridLines: { display: false },
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        })
+        }
+    </script>
+</body>
+</html>
